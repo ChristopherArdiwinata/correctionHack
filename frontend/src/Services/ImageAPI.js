@@ -1,7 +1,7 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
-dotenv.config();
+// dotenv.config();
 // interface ImageApiResponse {
 //   data: {
 //     id: string;
@@ -14,7 +14,8 @@ dotenv.config();
 
 
 // Use environment variables to store API keys securely.
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Make sure to set this in your environment
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Make sure to set this in your environment
+const OPENAI_API_KEY = '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'; // Make sure to set this in your environment
 
 export const fetchGeneratedImage = async (prompt) => {
   try {

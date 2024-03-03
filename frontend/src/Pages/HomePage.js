@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TypingTest } from "../Components/TypingTest";
 import { LearnComputerBasics } from "./LearnComputerBasics";
-import { ChatComponent } from "../Components/ChatComponent";
-
+import { ChatComponent } from "../Components/GPTQuiz";
 export const HomePage = () => {
 
   return (

@@ -1,9 +1,10 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
-dotenv.config();
+// dotenv.config();
 // It's important to use environment variables for storing API keys to keep them secure.
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Replace with your actual API key stored in an environment variable
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Replace with your actual API key stored in an environment variable
+const OPENAI_API_KEY = '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'; // Replace with your actual API key stored in an environment variable
 
 export const fetchChatGPTResponse = async (prompt) => {
   try {

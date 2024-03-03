@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { fetchChatGPTResponse } from '../Services/AuthServices/ChatAPI';
-import { fetchGeneratedImage } from '../Services/AuthServices/ImageAPI';
+import { fetchChatGPTResponse } from '../Services/ChatAPI';
+import { fetchGeneratedImage } from '../Services/ImageAPI';
 
 // // Define the interface for the question response
 // interface AnswerOption {
@@ -15,7 +15,7 @@ import { fetchGeneratedImage } from '../Services/AuthServices/ImageAPI';
 //   modelableWithImage: boolean; // Determines if images should be generated for the answers
 // }
 
-const ChatComponent = () => {
+export const ChatComponent = () => {
   const [questionResponse, setQuestionResponse] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -134,4 +134,4 @@ const ChatComponent = () => {
   );
 };
 
-export default ChatComponent;
+// export default ChatComponent;
