@@ -1,137 +1,158 @@
 import React, { useState, useEffect, useRef } from 'react';
-const quoteAPI = 'http://api.quotable.io/random';
+import { ThemeProvider } from "styled-components";
+import { defaultTheme, themesOptions } from "./style/theme";
+import { GlobalStyles } from "./style/global";
+import TypeBox from "./components/features/TypeBox/TypeBox";
+import SentenceBox from "./components/features/SentenceBox/SentenceBox";
+import Logo from "./components/common/Logo";
+import FreeTypingBox from "./components/features/FreeTypingBox";
+import {
+  GAME_MODE,
+  GAME_MODE_DEFAULT,
+  GAME_MODE_SENTENCE,
+} from "./constants/Constants";
+import useLocalPersistState from "./hooks/useLocalPersistState";
+import DefaultKeyboard from "./components/features/Keyboard/DefaultKeyboard";
+import WordsCard from "./components/features/WordsCard/WordsCard";
+
 
 export const TypingTest = () => {
-  // const [state, setState] = useState({
-  //   textToType: '',
-  //   typedText: '',
-  //   timeLeft: 60,
-  //   mistakes: 0,
-  //   wpm: 0,
-  // });
+  // localStorage persist theme setting
+  const [theme, setTheme] = useState(() => {
+    const stickyTheme = window.localStorage.getItem("theme");
+    if (stickyTheme !== null) {
+      const localTheme = JSON.parse(stickyTheme);
+      const upstreamTheme = themesOptions.find(
+        (e) => e.label === localTheme.label
+      ).value;
+      // we will do a deep equal here. In case we want to support customized local theme.
+      const isDeepEqual = localTheme === upstreamTheme;
+      return isDeepEqual ? localTheme : upstreamTheme;
+    }
+    return defaultTheme;
+  });
 
-  // const fetchQuote = async () => {
-  //   const response = await fetch(quoteAPI);
-  //   const data = await response.json();
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     textToType: data.content,
-  //   }));
-  // };
 
-  // const resetGame = () => {
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     typedText: '',
-  //     timeLeft: 60,
-  //     mistakes: 0,
-  //     wpm: 0,
-  //     cpm: 0,
-  //   }));
-  //   fetchQuote();
-  // }
-  // const [text, setText] = useState('');
-  // const [inputValue, setInputValue] = useState('');
-  // const [timeLeft, setTimeLeft] = useState(60);
-  // const [charIndex, setCharIndex] = useState(0);
-  // const [mistakes, setMistakes] = useState(0);
-  // const [isTyping, setIsTyping] = useState(false);
-  // const timerRef = useRef(null);
-  // type Timer = ReturnType<typeof setInterval>;
+  // local persist game mode setting
+  const [gameMode, setGameMode] = useLocalPersistState(
+    GAME_MODE_DEFAULT,
+    GAME_MODE
+  );
 
-  // const loadParagraph = () => {
-  //   const ranIndex = Math.floor(Math.random() * paragraphs.length);
-  //   setText(paragraphs[ranIndex]);
-  //   setCharIndex(0);
-  // };
+  const handleGameModeChange = (currGameMode) => {
+    setGameMode(currGameMode);
+  };
 
-  // const initTyping = (e) => {
-  //   const characters = text.split('');
-  //   const typedChar = e.target.value.split('')[charIndex];
-  //   if (charIndex < characters.length - 1 && timeLeft > 0) {
-  //     if (!isTyping) {
-  //       setIsTyping(true);
-  //     }
-  //     if (typedChar == null) {
-  //       if (charIndex > 0) {
-  //         setCharIndex((prev) => prev - 1);
-  //         const element = document.createElement('div');
-  //         element.innerHTML = characters[charIndex];
-  //         if (element.classList.contains('incorrect')) {
-  //           setMistakes((prev) => prev - 1);
-  //         }
-  //       }
-  //     } else {
-  //       if (characters[charIndex] === typedChar) {
-  //         const element = document.createElement('div');
-  //         element.innerHTML = characters[charIndex];
-  //         element.classList.add('correct');
-  //         characters[charIndex] = element.innerHTML;
-  //       } else {
-  //         setMistakes((prev) => prev + 1);
-  //         const element = document.createElement('div');
-  //         element.innerHTML = characters[charIndex];
-  //         element.classList.add('incorrect');
-  //         characters[charIndex] = element.innerHTML;
-  //       }
-  //       setCharIndex((prev) => prev + 1);
-  //     }
-  //   } else {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //     setInputValue('');
-  //   }
-  // };
+  // localStorage persist focusedMode setting
+  const [isFocusedMode, setIsFocusedMode] = useState(
+    localStorage.getItem("focused-mode") === "true"
+  );
 
-  // const initTimer = () => {
-  //   if (timeLeft > 0) {
-  //     setTimeLeft((prev) => prev - 1);
-  //   } else {
-  //     clearInterval(timerRef.current);
-  //   }
-  // };
+  // musicMode setting
+  const [isMusicMode, setIsMusicMode] = useState(false);
 
-  // const resetGame = () => {
-  //   loadParagraph();
-  //   clearInterval(timerRef.current);
-  //   setTimeLeft(60);
-  //   setCharIndex(0);
-  //   setMistakes(0);
-  //   setIsTyping(false);
-  //   setInputValue('');
-  // };
-  // const calculateWPM = () => {
-  //   let wpm = Math.round(((charIndex - mistakes) / 5) / (60 - timeLeft) * 60);
-  //   return wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
-  // };
+  // coffeeMode setting
+  const [isCoffeeMode, setIsCoffeeMode] = useState(false);
+
+  // trainer mode setting
+  const [isTrainerMode, setIsTrainerMode] = useState(false);
+
+  // words card mode
+  const [isWordsCardMode, setIsWordsCardMode] = useLocalPersistState(
+    false,
+    "IsInWordsCardMode"
+  );
+
+  const isWordGameMode =
+    gameMode === GAME_MODE_DEFAULT &&
+    !isCoffeeMode &&
+    !isTrainerMode &&
+    !isWordsCardMode;
+  const isSentenceGameMode =
+    gameMode === GAME_MODE_SENTENCE &&
+    !isCoffeeMode &&
+    !isTrainerMode &&
+    !isWordsCardMode;
+
+  useEffect(() => {
+    localStorage.setItem("focused-mode", isFocusedMode);
+  }, [isFocusedMode]);
+
+  const textInputRef = useRef(null);
+  const focusTextInput = () => {
+    textInputRef.current && textInputRef.current.focus();
+  };
+
+  const textAreaRef = useRef(null);
+  const focusTextArea = () => {
+    textAreaRef.current && textAreaRef.current.focus();
+  };
+
+  const sentenceInputRef = useRef(null);
+  const focusSentenceInput = () => {
+    sentenceInputRef.current && sentenceInputRef.current.focus();
+  };
+
+  useEffect(() => {
+    if (isWordGameMode) {
+      focusTextInput();
+      return;
+    }
+    if (isSentenceGameMode) {
+      focusSentenceInput();
+      return;
+    }
+    if (isCoffeeMode) {
+      focusTextArea();
+      return;
+    }
+    return;
+  }, [
+    theme,
+    isFocusedMode,
+    isMusicMode,
+    isCoffeeMode,
+    isWordGameMode,
+    isSentenceGameMode,
+  ]);
+
   return (
-    <div className="container-fluid col-md-4 border border-danger mx-auto mh-c">
-      <input type="text" className="input-field" />
-      <div className="content-box">
-        <div className="typing-text">
-          <p id="paragraph"></p>
+    <ThemeProvider theme={theme}>
+      <>
+        <div className="canvas smallerscale">
+          <GlobalStyles />
+          <Logo isFocusedMode={isFocusedMode} isMusicMode={isMusicMode}></Logo>
+          {isWordGameMode && (
+            <TypeBox
+              textInputRef={textInputRef}
+              isFocusedMode={isFocusedMode}
+              key="type-box"
+              handleInputFocus={() => focusTextInput()}
+            ></TypeBox>
+          )}
+          {isSentenceGameMode && (
+            <SentenceBox
+              sentenceInputRef={sentenceInputRef}
+              isFocusedMode={isFocusedMode}
+              key="sentence-box"
+              handleInputFocus={() => focusSentenceInput()}
+            ></SentenceBox>
+          )}
+          {isCoffeeMode && !isTrainerMode && !isWordsCardMode && (
+            <FreeTypingBox
+              textAreaRef={textAreaRef}
+            />
+          )}
+          {isTrainerMode && !isCoffeeMode && !isWordsCardMode && (
+            <DefaultKeyboard
+            ></DefaultKeyboard>
+          )}
+          {isWordsCardMode && !isCoffeeMode && !isTrainerMode && (
+            <WordsCard></WordsCard>
+          )}
         </div>
-        <div className="content">
-          <ul className="result-details">
-            <li className="time">
-              <p> Time Left:</p>
-              <span><b>60</b>s</span>
-            </li>
-            <li className="mistake">
-              <p>Mistakes:</p>
-              <span>0</span>
-            </li>
-            <li className="wpm">
-              <p>WPM:</p>
-              <span>0</span>
-            </li>
-
-          </ul>
-          {/* <button onClick={resetGame}>Try Again</button> */}
-        </div>
-      </div>
-    </div>
+      </>
+    </ThemeProvider>
   );
 }
 
