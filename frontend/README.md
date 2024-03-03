@@ -1,3 +1,11 @@
+# this hackathon project uses these following :
+these youtubers to learn some concepts:
+https://www.youtube.com/@CodeCreativeYT
+https://www.youtube.com/@WebDevSimplified
+and an opensource software: 
+https://github.com/gamer-ai
+and 
+AWS
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
