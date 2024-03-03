@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TypingTest } from "../Components/TypingTest";
+import { LearnComputerBasics } from "./LearnComputerBasics";
 
 export const HomePage = () => {
 
@@ -23,28 +24,15 @@ export const HomePage = () => {
           </ul>
         </div>
         <div className="tab-content" id="myTabContent">
-          <div className="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab">
-            <div className="container-fluid mt-5 d-flex m-0 djustify-content-center align-items-center">
-              <div className="row w-100 mx-auto">
-                <div id="user-nodes-analytics" className="container-fluid col-md-4 border border-danger mx-auto mh-c" aira-label='left-column'>
-                  <div>
-                    <div>
-                      <h3>Easy/ medium / hard</h3>
+                    <div className="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab">
+                      <div className="container-fluid mt-5 d-flex m-0 djustify-content-center align-items-center">
+                        <div className="row w-100 mx-auto">
+                         <LearnComputerBasics />
+                        </div>
+                      </div>
+                      <div >
+                      </div>
                     </div>
-                    <div>
-                    </div>
-                  </div>
-
-                </div>
-                <div id="user-nodes-container" className="container-fluid col-md-7 border border-danger mx-auto mh-c p-4" aria-label='right-column'>
-                  <div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div >
-            </div>
-          </div>
           <div className="tab-pane fade " id="typing-tab-pane" role="tabpanel" aria-labelledby="typing-tab">
             <TypingTest />
           </div>
